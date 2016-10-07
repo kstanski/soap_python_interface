@@ -124,6 +124,33 @@ Molecule **vectors2molecules(std::vector<intvector> atomic_no, std::vector<dmatr
     return mol_arr;
 }
 
+Molecule *vectors2molecule(intvector atomic_no, dmatrix coords)
+{
+    /* create molecule array */
+    Molecule *mol = (Molecule *) malloc(sizeof(Molecule));;
+
+    for (int i=0; i<ATOM_TYPES; i++)
+        mol->types_total[i] = 0;
+
+    int atoms_no = atomic_no.size();
+    mol->atoms_no = atoms_no;
+    int count_atoms = 0;
+    while (count_atoms < atoms_no)
+    {
+        mol->atom_types[count_atoms] = atomic_no2index(atomic_no[count_atoms]);
+        double pos[DIMENSIONS];
+        for (int i=0; i<DIMENSIONS; i++)
+        {
+            pos[i] = coords[count_atoms][i];
+        }
+        mol->ff_coords[count_atoms] = make_position(pos);
+        mol->types_total[atomic_no2index(atomic_no[count_atoms])]++;
+        count_atoms++;
+    }
+
+    return mol;
+}
+
 int type2index(char *type)
 {
     if (strcmp("H",type) == 0) return 0;

@@ -26,6 +26,7 @@ typedef struct molecule
 int index2atomic_no(int idx);
 int atomic_no2index(int at_no);
 Molecule **vectors2molecules(std::vector<intvector> atomic_no, std::vector<dmatrix> coords);
+Molecule *vectors2molecule(intvector atomic_no, dmatrix coords);
 
 Molecule **read_molecules(const char *filename, int molecules_no);
 int free_mol_array(Molecule **mol_arr, int molecules_no);

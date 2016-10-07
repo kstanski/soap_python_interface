@@ -11,7 +11,7 @@ typedef std::vector<dmatrix> dmatrix_arr;
 typedef std::vector<std::vector<std::vector<float> > > mol_repr;
 typedef std::vector<mol_repr> mol_repr_arr;
 
-mol_repr_arr soap_repr_func(intvector_arr atomic_no, dmatrix_arr coords);
+mol_repr soap_repr_func(intvector atomic_no, dmatrix coords);
 dmatrix soap_kernel_function(mol_repr_arr train_repr_arr, mol_repr_arr validate_repr_arr);
 
 #endif // SOAP_KERNEL_FUNCTION_H_INCLUDED

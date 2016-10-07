@@ -43,7 +43,16 @@ Descriptor *repr2desc(mol_repr_arr repr_arr)
 }
 
 
-mol_repr_arr soap_repr_func(intvector_arr atomic_no, dmatrix_arr coords)
+mol_repr soap_repr_func(intvector atomic_no, dmatrix coords)
+{
+    Molecule *mol = vectors2molecule(atomic_no, coords);
+    mol_repr repr = molecule2repr(mol);
+    free(mol);
+	return repr;
+}
+
+/*
+mol_repr_arr soap_repr_func_parallel(intvector_arr atomic_no, dmatrix_arr coords)
 {
     int obj_no = atomic_no.size();
     mol_repr_arr repr_arr(obj_no);
@@ -59,6 +68,7 @@ mol_repr_arr soap_repr_func(intvector_arr atomic_no, dmatrix_arr coords)
     free_mol_array(mol, obj_no);
 	return repr_arr;
 }
+*/
 
 dmatrix soap_kernel_function(mol_repr_arr train_repr_arr, mol_repr_arr validate_repr_arr = mol_repr_arr(0))
 {
@@ -160,7 +170,7 @@ PYBIND11_PLUGIN(soap) {
     py::module m("soap", "pybind11 soap plugin");
 
 	m.def("kernelf", &soap_kernel_function, "A SOAP kernel function",
-		py::arg("train_repr"), py::arg("validate_repr") = mol_repr_arr(0));
+		py::arg("train_repr"), py::arg("pred_repr") = mol_repr_arr(0));
 	m.def("reprf", &soap_repr_func, "A SOAP representation function",
 		py::arg("atomic_no"), py::arg("coords"));
 
