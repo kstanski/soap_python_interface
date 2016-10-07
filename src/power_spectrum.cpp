@@ -15,7 +15,6 @@
 Power_spectrum coords2power_spectrum(Position *coords, int coords_no)
 {
     /* create a power spectrum (vector of doubles) */
-    //int ps_length = (L_MAX+1)*pow(N_MAX,2);
     Power_spectrum ps = (Power_spectrum) malloc(PS_LEN*sizeof(ps_element_type));
 
     /* convert cartesian to spherical */
@@ -46,34 +45,20 @@ Power_spectrum coords2power_spectrum(Position *coords, int coords_no)
         }
 
         /* compute power spectrum terms */
-        for (int n1=0; n1<N_MAX; n1++)
+        for (int n=0; n<N_MAX; n++)
         {
-            for (int n2=0; n2<=n1; n2++)
+            ps_element_type ps_elem = 0;
+            for (int m_idx=0; m_idx<2*l+1; m_idx++)
             {
-                ps_element_type ps_elem1 = 0;
-                ps_element_type ps_elem2 = 0;
-                for (int m_idx=0; m_idx<2*l+1; m_idx++)
+                ps_element_type c = 0;
+                for (int atom_idx=0; atom_idx<coords_no; atom_idx++)
                 {
-                    ps_element_type c1 = 0;
-                    ps_element_type c2 = 0;
-                    for (int atom_idx=0; atom_idx<coords_no; atom_idx++)
-                    {
-                        c1 += rbf[atom_idx][n1]*sh[atom_idx][m_idx];
-                        c2 += rbf[atom_idx][n2]*sh[atom_idx][m_idx];
-                    }
+                    c += rbf[atom_idx][n]*sh[atom_idx][m_idx];
+                }
 
-                    ps_elem1 += c1*c2;
-                    if (n1 != n2)
-                    {
-                        ps_elem2 += c2*c1;
-                    }
-                }
-                ps[get_ps_idx(l,n1,n2)] = ps_elem1 * sqrt(8/(2*l+1));
-                if (n1 != n2)
-                {
-                    ps[get_ps_idx(l,n2,n1)] = ps_elem2 * sqrt(8/(2*l+1));
-                }
+                ps_elem += c;
             }
+            ps[get_ps_idx(l,n)] = ps_elem * sqrt(8/(2*l+1));
         }
     }
 
@@ -109,9 +94,9 @@ ps_element_type sh_real_form(int l, int m, double theta, double phi)
         return sqrt(2) * pow(-1,m) * std::real(sh);
 }
 
-int get_ps_idx(int l, int n1, int n2)
+int get_ps_idx(int l, int n)
 {
-    return l*N_MAX*N_MAX + n1*N_MAX + n2;
+    return l*N_MAX + n;
 }
 
 Coeff_matrix create_coeff_matrix(int n_max)

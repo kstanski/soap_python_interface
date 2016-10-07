@@ -7,6 +7,7 @@
 #define DIMENSIONS 3
 
 #include <boost/geometry.hpp>
+#include "soap_kernel_function.h"
 
 namespace bg = boost::geometry;
 typedef bg::model::point<double, DIMENSIONS, bg::cs::cartesian> Position;
@@ -21,6 +22,10 @@ typedef struct molecule
     Position ff_coords[MAX_ATOMS];
     Position dft_coords[MAX_ATOMS];
 } Molecule;
+
+int index2atomic_no(int idx);
+int atomic_no2index(int at_no);
+Molecule **vectors2molecules(std::vector<intvector> atomic_no, std::vector<dmatrix> coords);
 
 Molecule **read_molecules(const char *filename, int molecules_no);
 int free_mol_array(Molecule **mol_arr, int molecules_no);

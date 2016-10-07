@@ -1,5 +1,6 @@
 #include "neighbourhood.h"
 #include "molecule.h"
+#include <iostream>
 
 Neighbourhood *molecule2neighbourhoods(Molecule *mol_ptr)
 {
@@ -7,7 +8,6 @@ Neighbourhood *molecule2neighbourhoods(Molecule *mol_ptr)
     Neighbourhood *nhood_arr = create_nhoods(MAX_TOTAL);
     int atoms_no = mol_ptr->atoms_no;
     int max_types[] = {MAX_H,MAX_C,MAX_N,MAX_O,MAX_S};
-
     /* set indices of empty arrays to -1 */
     for (int idx=0; idx<MAX_TOTAL; idx++)
     {
@@ -16,7 +16,6 @@ Neighbourhood *molecule2neighbourhoods(Molecule *mol_ptr)
             nhood_arr[idx].last_atom_idx[type] = -1;
         }
     }
-
     /* search for close neighbours */
     Position c_i;
     for (int i=0; i<atoms_no; i++)  // for center atom
@@ -47,12 +46,11 @@ Neighbourhood *molecule2neighbourhoods(Molecule *mol_ptr)
             }
         }
     }
-
     /* top up with dummy atoms */
     int last = atoms_no - 1;
     for (int type=0; type<ATOM_TYPES; type++)
     {
-        int lack = max_types[type] - (mol_ptr->types_total)[type];
+        int lack = max_types[type] - mol_ptr->types_total[type];
         while (lack > 0)
         {
             last++;
@@ -62,7 +60,6 @@ Neighbourhood *molecule2neighbourhoods(Molecule *mol_ptr)
             lack--;
         }
     }
-
     return nhood_arr;
 }
 

@@ -1,5 +1,5 @@
 #include <string.h>
-
+#include <iostream>
 #include "molecule.h"
 
 Molecule **read_molecules(const char *filename, int molecules_no)
@@ -83,6 +83,47 @@ Molecule **read_molecules(const char *filename, int molecules_no)
     return mol_arr;
 }
 
+Molecule **vectors2molecules(std::vector<intvector> atomic_no, std::vector<dmatrix> coords)
+{
+    /* create molecule array */
+	int molecules_no = atomic_no.size();
+    Molecule **mol_arr = (Molecule **) malloc(molecules_no*sizeof(Molecule *));
+    for (int i=0; i<molecules_no; i++)
+    {
+        mol_arr[i] = (Molecule *) malloc(sizeof(Molecule));
+    }
+
+    int count_molecules = 0;
+
+    while (count_molecules < molecules_no)
+    {
+        Molecule *molecule = mol_arr[count_molecules];
+        for (int i=0; i<ATOM_TYPES; i++)
+            molecule->types_total[i] = 0;
+
+        intvector at_no = atomic_no[count_molecules];
+        int atoms_no = at_no.size();
+        molecule->atoms_no = atoms_no;
+        int count_atoms = 0;
+        while (count_atoms < atoms_no)
+        {
+            molecule->atom_types[count_atoms] = atomic_no2index(at_no[count_atoms]);
+            double pos[DIMENSIONS];
+            for (int i=0; i<DIMENSIONS; i++)
+            {
+                pos[i] = coords[count_molecules][count_atoms][i];
+            }
+            molecule->ff_coords[count_atoms] = make_position(pos);
+            molecule->types_total[atomic_no2index(at_no[count_atoms])]++;
+            count_atoms++;
+        }
+
+        count_molecules++;
+    }
+
+    return mol_arr;
+}
+
 int type2index(char *type)
 {
     if (strcmp("H",type) == 0) return 0;
@@ -90,6 +131,28 @@ int type2index(char *type)
     if (strcmp("N",type) == 0) return 2;
     if (strcmp("O",type) == 0) return 3;
     if (strcmp("S",type) == 0) return 4;
+    fprintf(stderr,"Unknown atom type\n");
+    return -1;
+}
+
+int index2atomic_no(int idx)
+{
+    if (idx == 0) return 1;
+    if (idx == 1) return 6;
+    if (idx == 2) return 7;
+    if (idx == 3) return 8;
+    if (idx == 4) return 16;
+    fprintf(stderr,"Unknown atom type\n");
+    return -1;
+}
+
+int atomic_no2index(int at_no)
+{
+    if (at_no == 1) return 0;
+    if (at_no == 6) return 1;
+    if (at_no == 7) return 2;
+    if (at_no == 8) return 3;
+    if (at_no == 16) return 4;
     fprintf(stderr,"Unknown atom type\n");
     return -1;
 }

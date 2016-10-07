@@ -1,18 +1,31 @@
 CPP	= g++
-CPPFLAGS	= -O3 -std=c++11 -Wall -fexceptions -msse4.2 -fopenmp
-LFLAGS	= -lgomp -pthread
-INCPATH	= -I../boost_1_61_0 -I../boost.simd/include
+CPPFLAGS	= -O3 -fPIC -std=c++11 -Wall -fexceptions -msse4.2 -fopenmp
+LFLAGS	= -shared -lgomp -pthread
+INCPATH	= -I../boost_1_61_0 -I../boost.simd/include -I ../pybind11/include -I /usr/include/python3.5
 
-DEPS = setup.h molecule.h solver.h neighbourhood.h stats.h stratify.h structural_similarity.h descriptor.h power_spectrum.h local_similarity.h run.h
-OBJ = setup.o molecule.o solver.o neighbourhood.o stats.o stratify.o structural_similarity.o descriptor.o power_spectrum.o local_similarity.o run.o
+SRCDIR = src
+OBJDIR = obj
 
-default: main.exe
+OBJOLD = soap_kernel_function.o setup.o molecule.o solver.o neighbourhood.o stats.o stratify.o structural_similarity.o descriptor.o power_spectrum.o local_similarity.o run.o
 
-%.o: %.cpp $(DEPS) $(CDEPS)
-	$(CPP) $(CPPFLAGS) $(INCPATH) -c -o $@ $<
+OBJ = soap_kernel_function.o molecule.o solver.o neighbourhood.o structural_similarity.o descriptor.o power_spectrum.o local_similarity.o
 
-main.exe: $(OBJ) main.o
+default: soap.so
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp | $(OBJDIR) $(SRCDIR)/%.h
+	$(CPP) $(CPPFLAGS) $(INCPATH) -c -o $@ $^
+
+$(OBJDIR):
+	mkdir $@
+
+main.exe: $(patsubst %, $(OBJDIR)/%, $(OBJ))
 	$(CPP) -o $@ $^ $(LFLAGS)
 
+soap.so: $(patsubst %, $(OBJDIR)/%, $(OBJ))
+	$(CPP) $(CPPFLAGS) $(INCPATH) -o $@ $^ $(LFLAGS)
+
 clean:
-	rm -rf *.o *.exe
+	rm -rf $(OBJDIR) *.exe *.so
+
+pybind:
+	g++ -O3 -shared -std=c++11 -fPIC -I ../pybind11/include -I /usr/include/python3.5 example.cpp -o example.so

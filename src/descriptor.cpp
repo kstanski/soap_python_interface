@@ -1,6 +1,8 @@
 #include "descriptor.h"
 #include "neighbourhood.h"
 #include "power_spectrum.h"
+#include "soap_kernel_function.h"
+#include <iostream>
 
 int molecule2descriptor(Molecule *mol_ptr, Descriptor desc)
 {
@@ -16,6 +18,29 @@ int molecule2descriptor(Molecule *mol_ptr, Descriptor desc)
     }
     free_nhoods(nhoods,MAX_TOTAL);
     return 0;
+}
+
+mol_repr molecule2repr(Molecule *mol_ptr)
+{
+	mol_repr repr(MAX_TOTAL);
+    Neighbourhood *nhoods = molecule2neighbourhoods(mol_ptr);
+    for (int atom_idx=0; atom_idx<MAX_TOTAL; atom_idx++)
+    {
+		repr[atom_idx].resize(ATOM_TYPES);
+        for (int type=0; type<ATOM_TYPES; type++)
+        {
+            int coords_no = nhoods[atom_idx].last_atom_idx[type]+1;
+            Position *coords = nhoods[atom_idx].coords[type];
+            Power_spectrum ps = coords2power_spectrum(coords,coords_no);
+			repr[atom_idx][type].resize(PS_LEN);
+			for (int i=0; i<PS_LEN; i++)
+			{
+				repr[atom_idx][type][i] = ps[i];
+			}
+        }
+    }
+    free_nhoods(nhoods,MAX_TOTAL);
+    return repr;
 }
 
 Descriptor *create_descriptor_arr(int desc_no)
