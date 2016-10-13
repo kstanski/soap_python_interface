@@ -1,7 +1,7 @@
 CPP	= g++
 CPPFLAGS	= -O3 -fPIC -std=c++11 -Wall -fexceptions -msse4.2 -fopenmp
 LFLAGS	= -shared -lgomp -pthread
-INCPATH	= -I../boost_1_61_0 -I../boost.simd/include -I ../pybind11/include -I /usr/include/python3.5
+INCPATH	= -I../boost_1_62_0 -I../boost.simd/include -I../pybind11/include
 
 SRCDIR = src
 OBJDIR = obj
