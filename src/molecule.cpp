@@ -1,6 +1,7 @@
-#include <string.h>
-#include <iostream>
 #include "molecule.h"
+
+#include <iostream>
+#include <string.h>
 
 Molecule **read_molecules(const char *filename, int molecules_no)
 {

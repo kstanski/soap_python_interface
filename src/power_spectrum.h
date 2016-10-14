@@ -1,8 +1,8 @@
 #ifndef POWER_SPECTRUM_H_INCLUDED
 #define POWER_SPECTRUM_H_INCLUDED
 
-#include <boost/numeric/ublas/matrix.hpp>
 #include "molecule.h"
+#include <boost/numeric/ublas/matrix.hpp>
 
 #define L_MAX 12
 #define N_MAX 10
@@ -11,6 +11,7 @@
 typedef boost::numeric::ublas::matrix<double> Coeff_matrix;
 typedef float ps_element_type;
 typedef ps_element_type *Power_spectrum;
+
 Power_spectrum coords2power_spectrum(Position *coords, int coords_no);
 int cart2sph(Position *coords, int coords_no, double *phi, double *theta, double *r);
 ps_element_type sh_real_form(int l, int m, double theta, double phi);

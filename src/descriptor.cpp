@@ -1,7 +1,9 @@
 #include "descriptor.h"
+
 #include "neighbourhood.h"
 #include "power_spectrum.h"
 #include "soap_kernel_function.h"
+
 #include <iostream>
 
 int molecule2descriptor(Molecule *mol_ptr, Descriptor desc)

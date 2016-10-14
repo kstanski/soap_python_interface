@@ -1,8 +1,8 @@
 #ifndef STRUCTURAL_SIMILARITY_H_INCLUDED
 #define STRUCTURAL_SIMILARITY_H_INCLUDED
 
-#include "power_spectrum.h"
 #include "descriptor.h"
+#include "power_spectrum.h"
 
 #define REG_PARAM 0.5
 #define ITERATIONS_NO 20

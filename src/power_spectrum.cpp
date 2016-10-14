@@ -1,16 +1,18 @@
-#include <stdlib.h>
-#include <complex>
+#include "power_spectrum.h"
+
+#include "molecule.h"
+#include "neighbourhood.h"
+#include "solver.h"
+
+#include <boost/geometry.hpp>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include <boost/geometry.hpp>
-#include <boost/simd/pack.hpp>
 #include <boost/simd/function/load.hpp>
 #include <boost/simd/function/sum.hpp>
+#include <boost/simd/pack.hpp>
 
-#include "power_spectrum.h"
-#include "neighbourhood.h"
-#include "molecule.h"
-#include "solver.h"
+#include <complex>
+#include <stdlib.h>
 
 Power_spectrum coords2power_spectrum(Position *coords, int coords_no)
 {

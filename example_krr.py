@@ -29,8 +29,8 @@ with open(filename) as f:
                 r.append(list(coords))
 
 print('pick training and prediction sets')
-train_no = 25
-pred_no = 20
+train_no = 100
+pred_no = 30
 ind_sample = random.sample(range(len(all_energy)), train_no+pred_no)
 ind_train = random.sample(ind_sample, train_no)
 ind_pred = list(set(ind_sample).difference(ind_train))

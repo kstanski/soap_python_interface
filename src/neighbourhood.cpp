@@ -1,5 +1,7 @@
 #include "neighbourhood.h"
+
 #include "molecule.h"
+
 #include <iostream>
 
 Neighbourhood *molecule2neighbourhoods(Molecule *mol_ptr)

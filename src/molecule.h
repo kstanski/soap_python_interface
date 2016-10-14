@@ -6,8 +6,8 @@
 #define ATOM_TYPES 5
 #define DIMENSIONS 3
 
-#include <boost/geometry.hpp>
 #include "soap_kernel_function.h"
+#include <boost/geometry.hpp>
 
 namespace bg = boost::geometry;
 typedef bg::model::point<double, DIMENSIONS, bg::cs::cartesian> Position;
@@ -27,7 +27,6 @@ int index2atomic_no(int idx);
 int atomic_no2index(int at_no);
 Molecule **vectors2molecules(std::vector<intvector> atomic_no, std::vector<dmatrix> coords);
 Molecule *vectors2molecule(intvector atomic_no, dmatrix coords);
-
 Molecule **read_molecules(const char *filename, int molecules_no);
 int free_mol_array(Molecule **mol_arr, int molecules_no);
 int type2index(char *type);
